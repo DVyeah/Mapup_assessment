@@ -25,7 +25,7 @@ def extract_trips(df, output_dir):
         current_time = row['timestamp']
         time_diff = current_time - trip_start_time
         
-        # Check if a new trip should start based on time difference
+        # Check for new trip
         if time_diff > time_threshold:
             # Save trip data to a CSV file
             trip_data.to_csv(f'{output_dir}/{unit}_{trip_number}.csv', index=False)
@@ -42,7 +42,7 @@ def extract_trips(df, output_dir):
     trip_data.to_csv(f'{output_dir}/{unit}_{trip_number}.csv', index=False)
 
 def main():
-    # Parse command-line arguments
+    # Parse args
     parser = argparse.ArgumentParser(description='Process GPS data and extract trips')
     parser.add_argument('--to_process', type=str, help='Path to the Parquet file to be processed')
     parser.add_argument('--output_dir', type=str, help='The folder to store the resulting CSV files')
@@ -55,7 +55,7 @@ def main():
         print(f"Error reading Parquet file: {e}")
         return
     
-    # Group data by 'unit' and extract trips for each unit
+    # Group data by 'unit' 
     for unit, df_unit in data.groupby('unit'):
         extract_trips(df_unit, args.output_dir)
 
